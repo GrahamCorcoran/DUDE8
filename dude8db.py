@@ -23,9 +23,16 @@ class DueDates(BaseModel):
 
 
 def add_duedate(server_id, description, due_date):
-    return DueDates.create(serverID=server_id,
-                           description=description,
-                           due_date=due_date)
+    try:
+        date = datetime.datetime.strptime(due_date, '%Y-%m-%d').date()
+    except ValueError:
+        return "``ERROR: Invalid Date. Use format YYYY-MM-DD``"
+
+    DueDates.create(serverID=server_id,
+                    description=description,
+                    due_date=due_date)
+
+    return f"Added: {description} on {due_date}."
 
 
 def remove_duedate(server_id, description):
