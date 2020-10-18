@@ -1,4 +1,4 @@
-#dude8
+# dude8
 
 dude8 is a minimalist Discord bot for tracking due dates and reminding the server of upcoming due dates.
 Primarily intended for use in school Discord channels.
