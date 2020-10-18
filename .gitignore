@@ -141,4 +141,4 @@ cython_debug/
 *.db
 
 # This is super temporary until I care to set up envars for this.
-dude8/secrets.py
+secrets.py

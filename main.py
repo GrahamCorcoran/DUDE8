@@ -1,5 +1,6 @@
 import discord
-from dude8 import dude8db, secrets
+import secrets
+import dude8db
 
 client = discord.Client()
 
@@ -16,6 +17,7 @@ async def on_message(message):
 
     if message.content.startswith('!dd'):
         await message.channel.send('Hello!')
+
 
 @client.event
 async def on_guild_join(guild):
