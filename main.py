@@ -17,6 +17,13 @@ async def add(ctx, description, date):
     await ctx.send(response)
 
 
+@dude8.command(rest_is_raw=True)
+async def bulkadd(ctx, *, csv):
+    guild_id = ctx.message.guild.id
+    response = dude8db.bulk_add(guild_id, csv)
+    await ctx.send(response)
+
+
 @dude8.event
 async def on_guild_join(guild):
     dude8db.add_server(guild.id)

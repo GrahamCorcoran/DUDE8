@@ -41,6 +41,28 @@ def remove_duedate(server_id, description):
     return query.execute()
 
 
+def bulk_add(server_id, input_csv):
+    split_input = [_.strip() for _ in input_csv.split(',')]
+    descriptions = []
+    due_dates = []
+    for index, item in enumerate(split_input):
+        if index % 2 == 0:
+            descriptions.append(item)
+        else:
+            due_dates.append(item)
+
+    data_list = [{'serverID': server_id,
+                  'description': description,
+                  'due_date': due_date}
+                 for description, due_date in zip(descriptions, due_dates)]
+
+    print(data_list)
+    DueDates.insert_many(data_list).execute()
+
+    return "Success"
+
+
+
 def add_server(server_id):
     return Server.get_or_create(serverID=server_id,
                                 notification_time=datetime.time(hour=8))
