@@ -35,8 +35,8 @@ def remove_duedate(server_id, description):
 
 
 def add_server(server_id):
-    return Server.create(serverID=server_id,
-                         notification_time=datetime.time(hour=8))
+    return Server.get_or_create(serverID=server_id,
+                                notification_time=datetime.time(hour=8))
 
 
 if __name__ == "__main__":
