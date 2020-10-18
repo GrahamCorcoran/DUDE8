@@ -1,6 +1,5 @@
 import discord
-import secrets
-import dude8db
+from dude8 import dude8db, secrets
 
 client = discord.Client()
 
