@@ -1,6 +1,7 @@
-import discord
-import secrets
 import dude8db
+import secrets
+import embeds
+import discord
 
 client = discord.Client()
 
@@ -16,7 +17,7 @@ async def on_message(message):
         return
 
     if message.content.startswith('!dd'):
-        await message.channel.send('Hello!')
+        await message.channel.send(embed=embeds.welcome)
 
 
 @client.event
