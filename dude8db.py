@@ -60,7 +60,6 @@ def bulk_add(server_id, input_csv):
                   'due_date': due_date}
                  for description, due_date in zip(descriptions, due_dates)]
 
-    print(data_list)
     DueDates.insert_many(data_list).execute()
 
     return "Success, all entries added."
@@ -71,10 +70,9 @@ def add_server(server_id):
                                 notification_time=datetime.time(hour=8))
 
 
-
 if __name__ == "__main__":
     db.connect()
     if input("Do you want to drop tables? Y/N: ").lower() in "yes":
         db.drop_tables([Server, DueDates])
     db.create_tables([Server, DueDates])
-    add_server()
+    add_server(767399931304476702)
