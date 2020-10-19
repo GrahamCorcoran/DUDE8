@@ -1,4 +1,5 @@
 from discord.ext import commands
+from discord.utils import get
 import dude8db
 import secrets
 
@@ -29,6 +30,18 @@ async def remove(ctx, description):
     guild_id = ctx.message.guild.id
     response = dude8db.remove_duedate(guild_id, description)
     await ctx.send(response)
+
+
+@dude8.command()
+async def set_channel(ctx, channel_name):
+    channel = get(ctx.guild.channels, name=channel_name)
+    if channel:
+        server = dude8db.Server
+        (server.update({server.text_channel: channel_name})
+               .where(server.serverID == ctx.guild.id)).execute()
+        await ctx.send(f"Updated notification channel to {channel_name}.")
+    else:
+        await ctx.send(f"No channel found named {channel_name}.")
 
 
 
