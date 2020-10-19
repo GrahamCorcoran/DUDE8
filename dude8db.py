@@ -36,9 +36,13 @@ def add_duedate(server_id, description, due_date):
 
 
 def remove_duedate(server_id, description):
-    query = DueDates.delete().where(serverID=server_id,
-                                    description=description)
-    return query.execute()
+    quantity_removed = DueDates.delete().where(DueDates.serverID == server_id,
+                                               DueDates.description == description).execute()
+
+    if quantity_removed:
+        return f"Success! {description} removed."
+    else:
+        return f"No records matched."
 
 
 def bulk_add(server_id, input_csv):
@@ -59,8 +63,7 @@ def bulk_add(server_id, input_csv):
     print(data_list)
     DueDates.insert_many(data_list).execute()
 
-    return "Success"
-
+    return "Success, all entries added."
 
 
 def add_server(server_id):
@@ -68,8 +71,10 @@ def add_server(server_id):
                                 notification_time=datetime.time(hour=8))
 
 
+
 if __name__ == "__main__":
     db.connect()
     if input("Do you want to drop tables? Y/N: ").lower() in "yes":
         db.drop_tables([Server, DueDates])
     db.create_tables([Server, DueDates])
+    add_server()

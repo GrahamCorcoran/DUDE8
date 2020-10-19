@@ -24,6 +24,14 @@ async def bulkadd(ctx, *, csv):
     await ctx.send(response)
 
 
+@dude8.command()
+async def remove(ctx, description):
+    guild_id = ctx.message.guild.id
+    response = dude8db.remove_duedate(guild_id, description)
+    await ctx.send(response)
+
+
+
 @dude8.event
 async def on_guild_join(guild):
     dude8db.add_server(guild.id)
