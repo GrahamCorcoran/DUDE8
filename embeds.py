@@ -9,8 +9,8 @@ setup = embeds.Embed(title="Setup",
 setup.set_author(name="DUDE8", url="https://github.com/GrahamCorcoran/DUDE8",
                  icon_url=dude8_logo)
 setup.add_field(name="Timezone",
-                value="!dd timezone <timezone> \n Note: timezone MUST be in the format 'America/New_York, "
-                      "for a full list of Timezones see <link>",
+                value="!dd timezone <timezone> \n Note: timezone MUST be in the format 'America/New_York', "
+                      "for a full list of Timezones see https://github.com/GrahamCorcoran/DUDE8/blob/dev/timezones",
                 inline=False)
 setup.add_field(name="Preferred Notification Time",
                 value="!dd notification <h> \n"
