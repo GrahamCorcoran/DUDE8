@@ -1,5 +1,6 @@
 from discord.ext import commands
 from discord.utils import get
+import embeds
 import dude8db
 import secrets
 
@@ -33,6 +34,11 @@ async def remove(ctx, description):
 
 
 @dude8.command()
+async def setup(ctx):
+    await ctx.send(embed=embeds.setup)
+
+
+@dude8.command()
 async def set_channel(ctx, channel_name):
     channel = get(ctx.guild.channels, name=channel_name)
     if channel:
@@ -42,7 +48,6 @@ async def set_channel(ctx, channel_name):
         await ctx.send(f"Updated notification channel to {channel_name}.")
     else:
         await ctx.send(f"No channel found named {channel_name}.")
-
 
 
 @dude8.event
