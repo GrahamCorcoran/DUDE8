@@ -6,6 +6,7 @@ Primarily intended for use in school Discord channels.
 
 **WARNING: dude8 is currently in the very early stages of development and is unstable. Using dude8 in the current form is NOT recommended**
 
+[dude8 Development Discord](https://discord.gg/hyBeJnt)
 
 ## Roadmap
 [Public Roadmap](https://trello.com/b/3MYnaphu/public-roadmap)
