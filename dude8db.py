@@ -14,6 +14,7 @@ class Server(BaseModel):
     timezone = pw.TextField(null=True)
     weekly_notification = pw.IntegerField(null=True)
     notification_time = pw.TimeField()
+    text_channel = pw.TextField(default="general")
 
 
 class DueDates(BaseModel):
