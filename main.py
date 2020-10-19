@@ -34,6 +34,13 @@ async def remove(ctx, description):
 
 
 @dude8.command()
+async def timezone(ctx, new_timezone):
+    guild_id = ctx.message.guild.id
+    response = dude8db.change_timezone(guild_id, new_timezone)
+    await ctx.send(response)
+
+
+@dude8.command()
 async def setup(ctx):
     await ctx.send(embed=embeds.setup)
 

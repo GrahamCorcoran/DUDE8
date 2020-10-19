@@ -1,5 +1,6 @@
 import peewee as pw
 import datetime
+import pytz
 
 db = pw.SqliteDatabase('dude8.db')
 
@@ -69,6 +70,15 @@ def bulk_add(server_id, input_csv):
 def add_server(server_id):
     return Server.get_or_create(serverID=server_id,
                                 notification_time=datetime.time(hour=8))
+
+
+def change_timezone(server_id, timezone):
+    if timezone in pytz.all_timezones:
+        (Server.update({Server.timezone: timezone})
+               .where(Server.serverID == server_id)).execute()
+        return f"Successfully updated server timezone to {timezone}."
+    else:
+        return f"{timezone} is not a valid timezone."
 
 
 if __name__ == "__main__":
