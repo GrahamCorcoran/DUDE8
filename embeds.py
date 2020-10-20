@@ -1,11 +1,13 @@
 from discord import embeds
+import dude8db
 
 dude8_logo = "https://raw.githubusercontent.com/GrahamCorcoran/DUDE8/dev/images/DUDE8.jpg"
 
 
 setup = embeds.Embed(title="Setup",
                      description="To set up dude8, the timezone and your preferred "
-                                 "notification time must be set. (Default 8am) \n")
+                                 "notification time must be set. (Default 8am) \n",
+                     color=0xe67e22)
 setup.set_author(name="DUDE8", url="https://github.com/GrahamCorcoran/DUDE8",
                  icon_url=dude8_logo)
 setup.add_field(name="Timezone",
