@@ -68,13 +68,15 @@ def change_timezone(server_id, timezone):
         return f"{timezone} is not a valid timezone."
 
 
-def get_valid_servers():
+def get_valid_servers(days_delta=7):
     now = datetime.datetime.now()
     valid_servers = (Server.select(Server.serverID)
                            .distinct(True)
                            .join(Course)
                            .join(DueDates)
-                           .where(now < DueDates.due_date, DueDates.due_date <= now+datetime.timedelta(days=7)))
+                           .where(now < DueDates.due_date,
+                                  DueDates.due_date <= now+datetime.timedelta(days=days_delta))
+                     )
 
     return valid_servers
 
