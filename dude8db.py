@@ -68,6 +68,17 @@ def change_timezone(server_id, timezone):
         return f"{timezone} is not a valid timezone."
 
 
+def get_valid_servers():
+    now = datetime.datetime.now()
+    valid_servers = (Server.select(Server.serverID)
+                           .distinct(True)
+                           .join(Course)
+                           .join(DueDates)
+                           .where(now < DueDates.due_date, DueDates.due_date <= now+datetime.timedelta(days=7)))
+
+    return valid_servers
+
+
 if __name__ == "__main__":
     db.connect()
     if input("Do you want to drop tables? Y/N: ").lower() in "yes":
