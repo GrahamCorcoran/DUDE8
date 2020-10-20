@@ -50,7 +50,7 @@ async def set_channel(ctx, channel_name):
     channel = get(ctx.guild.channels, name=channel_name)
     if channel:
         server = dude8db.Server
-        (server.update({server.text_channel: channel_name})
+        (server.update({server.text_channel: channel.id})
                .where(server.serverID == ctx.guild.id)).execute()
         await ctx.send(f"Updated notification channel to {channel_name}.")
     else:
