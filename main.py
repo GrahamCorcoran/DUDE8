@@ -13,9 +13,9 @@ async def on_ready():
 
 
 @dude8.command()
-async def add(ctx, description, date):
+async def add(ctx, course, description, date):
     guild_id = ctx.message.guild.id
-    response = dude8db.add_duedate(guild_id, description, date)
+    response = dude8db.add_duedate(guild_id, course, description, date)
     await ctx.send(response)
 
 
@@ -27,9 +27,9 @@ async def bulkadd(ctx, *, csv):
 
 
 @dude8.command()
-async def remove(ctx, description):
+async def remove(ctx, course, description):
     guild_id = ctx.message.guild.id
-    response = dude8db.remove_duedate(guild_id, description)
+    response = dude8db.remove_duedate(guild_id, course, description)
     await ctx.send(response)
 
 

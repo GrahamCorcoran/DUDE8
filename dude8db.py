@@ -18,27 +18,34 @@ class Server(BaseModel):
     text_channel = pw.TextField(default="general")
 
 
+class Course(BaseModel):
+    serverID = pw.ForeignKeyField(Server, backref='course')
+    course_name = pw.TextField()
+
+
 class DueDates(BaseModel):
-    serverID = pw.ForeignKeyField(Server, backref='duedates')
+    course = pw.ForeignKeyField(Course, backref='duedates')
     description = pw.TextField()
     due_date = pw.DateTimeField()
 
 
-def add_duedate(server_id, description, due_date):
+def add_duedate(server_id, course, description, due_date):
     try:
         date = datetime.datetime.strptime(due_date, '%Y-%m-%d').date()
     except ValueError:
         return "``ERROR: Invalid Date. Use format YYYY-MM-DD``"
 
-    DueDates.create(serverID=server_id,
+    course_id = Course.get_or_create(serverID=server_id, course_name=course)
+    DueDates.create(course=course_id[0],
                     description=description,
-                    due_date=due_date)
+                    due_date=date)
 
     return f"Added: {description} on {due_date}."
 
 
-def remove_duedate(server_id, description):
-    quantity_removed = DueDates.delete().where(DueDates.serverID == server_id,
+def remove_duedate(server_id, course, description):
+    course_id = Course.get_or_create(serverID=server_id, course_name=course)
+    quantity_removed = DueDates.delete().where(DueDates.course == course_id[0],
                                                DueDates.description == description).execute()
 
     if quantity_removed:
@@ -84,6 +91,6 @@ def change_timezone(server_id, timezone):
 if __name__ == "__main__":
     db.connect()
     if input("Do you want to drop tables? Y/N: ").lower() in "yes":
-        db.drop_tables([Server, DueDates])
-    db.create_tables([Server, DueDates])
+        db.drop_tables([Server, DueDates, Course])
+    db.create_tables([Server, DueDates, Course])
     add_server(767399931304476702)
