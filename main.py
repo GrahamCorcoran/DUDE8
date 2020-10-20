@@ -19,13 +19,6 @@ async def add(ctx, course, description, date):
     await ctx.send(response)
 
 
-@dude8.command(rest_is_raw=True)
-async def bulkadd(ctx, *, csv):
-    guild_id = ctx.message.guild.id
-    response = dude8db.bulk_add(guild_id, csv)
-    await ctx.send(response)
-
-
 @dude8.command()
 async def remove(ctx, course, description):
     guild_id = ctx.message.guild.id
