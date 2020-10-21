@@ -1,5 +1,5 @@
 import peewee as pw
-import datetime
+from datetime import datetime, timedelta
 import pytz
 
 db = pw.SqliteDatabase('dude8.db')
@@ -14,8 +14,29 @@ class Server(BaseModel):
     serverID = pw.IntegerField(primary_key=True)
     timezone = pw.TextField(null=True)
     weekly_notification = pw.IntegerField(null=True)
-    notification_time = pw.TimeField()
+    notification_time = pw.IntegerField()
     text_channel = pw.TextField(default="general")
+
+    @classmethod
+    def workable_servers(cls):
+        now = datetime.now().date()
+        servers = (Server.select(Server.serverID, Server.timezone, Server.notification_time)
+                         .distinct()
+                         .join(Course)
+                         .join(DueDates)
+                         .where(
+            (Server.timezone.is_null(False)) &
+            (now < DueDates.due_date) &
+            (DueDates.due_date < now+timedelta(days=8))
+        ))
+
+        action_list = []
+        for server in servers:
+            current_hour = datetime.now(tz=pytz.timezone(server.timezone)).hour
+            if current_hour == server.notification_time:
+                action_list.append(server.serverID)
+
+        return action_list
 
 
 class Course(BaseModel):
@@ -31,7 +52,7 @@ class DueDates(BaseModel):
 
 def add_duedate(server_id, course, description, due_date):
     try:
-        date = datetime.datetime.strptime(due_date, '%Y-%m-%d').date()
+        date = datetime.strptime(due_date, '%Y-%m-%d').date()
     except ValueError:
         return "``ERROR: Invalid Date. Use format YYYY-MM-DD``"
 
@@ -56,7 +77,7 @@ def remove_duedate(server_id, course, description):
 
 def add_server(server_id):
     return Server.get_or_create(serverID=server_id,
-                                notification_time=datetime.time(hour=8))
+                                notification_time=8)
 
 
 def change_timezone(server_id, timezone):
@@ -68,17 +89,13 @@ def change_timezone(server_id, timezone):
         return f"{timezone} is not a valid timezone."
 
 
-def get_valid_servers(days_delta=7):
-    now = datetime.datetime.now()
-    valid_servers = (Server.select(Server.serverID)
-                           .distinct(True)
-                           .join(Course)
-                           .join(DueDates)
-                           .where(now < DueDates.due_date,
-                                  DueDates.due_date <= now+datetime.timedelta(days=days_delta))
-                     )
-
-    return valid_servers
+def change_notification(server_id, new_hour):
+    if 0 <= int(new_hour) <= 23:
+        (Server.update({Server.notification_time: new_hour})
+               .where(Server.serverID == server_id)).execute()
+        return f"Successfully updated server notification time to {new_hour}:00"
+    else:
+        return f"{new_hour} is not a valid hour. Enter an hour between 0-23."
 
 
 if __name__ == "__main__":
