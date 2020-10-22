@@ -1,4 +1,5 @@
 import peewee as pw
+from playhouse.shortcuts import model_to_dict
 from datetime import datetime, timedelta
 import pytz
 
@@ -16,27 +17,6 @@ class Server(BaseModel):
     weekly_notification = pw.IntegerField(null=True)
     notification_time = pw.IntegerField()
     text_channel = pw.TextField(default="general")
-
-    @classmethod
-    def workable_servers(cls):
-        now = datetime.now().date()
-        servers = (Server.select(Server.serverID, Server.timezone, Server.notification_time)
-                         .distinct()
-                         .join(Course)
-                         .join(DueDates)
-                         .where(
-            (Server.timezone.is_null(False)) &
-            (now < DueDates.due_date) &
-            (DueDates.due_date < now+timedelta(days=8))
-        ))
-
-        action_list = []
-        for server in servers:
-            current_hour = datetime.now(tz=pytz.timezone(server.timezone)).hour
-            if current_hour == server.notification_time:
-                action_list.append(server.serverID)
-
-        return action_list
 
 
 class Course(BaseModel):
@@ -78,6 +58,21 @@ def remove_duedate(server_id, course, description):
 def add_server(server_id):
     return Server.get_or_create(serverID=server_id,
                                 notification_time=8)
+
+
+def valid_servers():
+    yesterday = datetime.now() - timedelta(days=1)
+    query = (Server.select(Server)
+                   .distinct()
+                   .join(Course)
+                   .join(DueDates)
+                   .where(
+        (Server.timezone.is_null(False)) &
+        (DueDates.due_date >= yesterday)
+    ))
+    dict_form = [model_to_dict(server, backrefs=True) for server in query]
+
+    return dict_form
 
 
 def change_timezone(server_id, timezone):

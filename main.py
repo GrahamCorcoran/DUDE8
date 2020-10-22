@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from discord.ext import commands, tasks
 from discord.utils import get
 import embeds
@@ -10,6 +12,7 @@ dude8 = commands.Bot(command_prefix="!dd ")
 @dude8.event
 async def on_ready():
     print('We have logged in as {0.user}'.format(dude8))
+    post_reminders.start()
 
 
 @dude8.command()
@@ -55,6 +58,14 @@ async def set_channel(ctx, channel_name):
         await ctx.send(f"Updated notification channel to {channel_name}.")
     else:
         await ctx.send(f"No channel found named {channel_name}.")
+
+
+@tasks.loop(seconds=10)
+async def post_reminders():
+    valid_servers = dude8db.valid_servers()
+    for server in valid_servers:
+        print(server)
+
 
 
 @dude8.event
