@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 import pytz
 import time
 
@@ -75,14 +75,48 @@ async def post_reminders():
     for server in valid_servers:
         now = datetime.now(tz=pytz.timezone(server['timezone']))
         notify = now.hour == server['notification_time']
-        weekly = int(now.isoweekday()) == server['weekly_notification']
 
         if notify:
+            channel = dude8.get_channel(int(server['text_channel']))
+            weekly = int(now.isoweekday()) == server['weekly_notification']
+
             if weekly:
                 # Post the weekly
                 pass
-            # Post the Daily
+            daily = embeds.upcoming.copy()
+            today = add_day_as_row(now, server, now.date())
+            daily.add_field(name=today[0], value=today[1], inline=False)
+
+            tomorrow = add_day_as_row(now, server, now.date() + timedelta(days=1))
+            if tomorrow:
+                daily.add_field(name=tomorrow[0], value=tomorrow[1], inline=False)
+
+            await channel.send(embed=daily)
+
             print(server['serverID'], "Notification time!")
+
+
+def add_day_as_row(now, server, target_date):
+    day_return = []
+    for course in server['course']:
+        for due_date in course['duedates']:
+            if datetime.date(due_date['due_date']) == target_date:
+                day_return.append(f"{course['course_name']} - {due_date['description']}")
+
+    if day_return:
+        current_date = now.date()
+        if current_date == target_date:
+            title = "Today"
+        elif current_date + timedelta(days=1) == target_date:
+            title = "Tomorrow"
+        else:
+            title = target_date.strftime("%A")
+        return_text = ""
+        for due_date in day_return:
+            return_text += due_date + "\n"
+
+        return [title, return_text]
+    return False
 
 
 @dude8.event
