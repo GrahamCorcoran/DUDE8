@@ -37,14 +37,14 @@ async def setup(ctx):
 
 
 @dude8.command()
-async def timezone(ctx, new_timezone):
+async def set_timezone(ctx, new_timezone):
     guild_id = ctx.message.guild.id
     response = dude8db.change_timezone(guild_id, new_timezone)
     await ctx.send(response)
 
 
 @dude8.command()
-async def notification_time(ctx, new_notification_hour):
+async def set_notification_time(ctx, new_notification_hour):
     guild_id = ctx.message.guild.id
     response = dude8db.change_notification(guild_id, new_notification_hour)
     await ctx.send(response)
@@ -60,6 +60,13 @@ async def set_channel(ctx, channel_name):
         await ctx.send(f"Updated notification channel to {channel_name}.")
     else:
         await ctx.send(f"No channel found named {channel_name}.")
+
+
+@dude8.command()
+async def set_weekly_notification(ctx, new_notification_day):
+    guild_id=ctx.message.guild.id
+    response = dude8db.change_weekly_notification(guild_id, new_notification_day)
+    await ctx.send(response)
 
 
 @tasks.loop(seconds=10)

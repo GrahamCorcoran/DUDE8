@@ -93,6 +93,15 @@ def change_notification(server_id, new_hour):
         return f"{new_hour} is not a valid hour. Enter an hour between 0-23."
 
 
+def change_weekly_notification(server_id, new_day):
+    if 0 <= int(new_day) <= 6:
+        (Server.update({Server.weekly_notification: new_day})
+               .where(Server.serverID == server_id)).execute()
+        return f"Successfully updated server notification day to {new_day}."
+    else:
+        return f"{new_day} is not a valid day. Please enter a number 0-6 for Sunday-Saturday."
+
+
 if __name__ == "__main__":
     db.connect()
     if input("Do you want to drop tables? Y/N: ").lower() in "yes":
