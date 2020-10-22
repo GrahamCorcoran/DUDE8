@@ -1,4 +1,6 @@
 from datetime import datetime
+import pytz
+import time
 
 from discord.ext import commands, tasks
 from discord.utils import get
@@ -64,8 +66,16 @@ async def set_channel(ctx, channel_name):
 async def post_reminders():
     valid_servers = dude8db.valid_servers()
     for server in valid_servers:
-        print(server)
+        now = datetime.now(tz=pytz.timezone(server['timezone']))
+        notify = now.hour == server['notification_time']
+        weekly = int(now.day) == server['weekly_notification']
 
+        if notify:
+            if weekly:
+                # Post the weekly
+                pass
+            # Post the Daily
+            print(server['serverID'], "Notification time!")
 
 
 @dude8.event
