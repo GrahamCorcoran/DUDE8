@@ -68,7 +68,7 @@ async def post_reminders():
     for server in valid_servers:
         now = datetime.now(tz=pytz.timezone(server['timezone']))
         notify = now.hour == server['notification_time']
-        weekly = int(now.day) == server['weekly_notification']
+        weekly = int(now.isoweekday()) == server['weekly_notification']
 
         if notify:
             if weekly:
