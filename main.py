@@ -1,4 +1,4 @@
-from discord.ext import commands
+from discord.ext import commands, tasks
 from discord.utils import get
 import embeds
 import dude8db
@@ -27,6 +27,11 @@ async def remove(ctx, course, description):
 
 
 @dude8.command()
+async def setup(ctx):
+    await ctx.send(embed=embeds.setup)
+
+
+@dude8.command()
 async def timezone(ctx, new_timezone):
     guild_id = ctx.message.guild.id
     response = dude8db.change_timezone(guild_id, new_timezone)
@@ -34,8 +39,10 @@ async def timezone(ctx, new_timezone):
 
 
 @dude8.command()
-async def setup(ctx):
-    await ctx.send(embed=embeds.setup)
+async def notification_time(ctx, new_notification_hour):
+    guild_id = ctx.message.guild.id
+    response = dude8db.change_notification(guild_id, new_notification_hour)
+    await ctx.send(response)
 
 
 @dude8.command()
