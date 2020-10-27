@@ -95,8 +95,6 @@ async def post_reminders():
             if today or tomorrow:
                 await channel.send(embed=daily)
 
-            print(server['serverID'], "Notification time!")
-
 
 def add_day_as_row(now, server, target_date):
     day_return = []
