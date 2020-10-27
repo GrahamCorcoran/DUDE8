@@ -85,13 +85,15 @@ async def post_reminders():
                 pass
             daily = embeds.upcoming.copy()
             today = add_day_as_row(now, server, now.date())
-            daily.add_field(name=today[0], value=today[1], inline=False)
-
             tomorrow = add_day_as_row(now, server, now.date() + timedelta(days=1))
+
+            if today:
+                daily.add_field(name=today[0], value=today[1], inline=False)
             if tomorrow:
                 daily.add_field(name=tomorrow[0], value=tomorrow[1], inline=False)
 
-            await channel.send(embed=daily)
+            if today or tomorrow:
+                await channel.send(embed=daily)
 
             print(server['serverID'], "Notification time!")
 
