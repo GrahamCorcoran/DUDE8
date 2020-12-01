@@ -18,6 +18,7 @@ async def on_ready():
 
 
 @dude8.command()
+@commands.has_any_role('Scheduler', 'DD Scheduler')
 async def add(ctx, course, description, date):
     guild_id = ctx.message.guild.id
     response = dude8db.add_duedate(guild_id, course, description, date)
@@ -25,6 +26,7 @@ async def add(ctx, course, description, date):
 
 
 @dude8.command()
+@commands.has_any_role('Scheduler', 'DD Scheduler')
 async def remove(ctx, course, description):
     guild_id = ctx.message.guild.id
     response = dude8db.remove_duedate(guild_id, course, description)
@@ -32,18 +34,22 @@ async def remove(ctx, course, description):
 
 
 @dude8.command()
+@commands.has_any_role('Scheduler', 'DD Scheduler')
 async def setup(ctx):
     await ctx.send(embed=embeds.setup)
 
 
 @dude8.command()
+@commands.has_any_role('Scheduler', 'DD Scheduler')
 async def set_timezone(ctx, new_timezone):
     guild_id = ctx.message.guild.id
     response = dude8db.change_timezone(guild_id, new_timezone)
     await ctx.send(response)
+    await ctx.message.delete()
 
 
 @dude8.command()
+@commands.has_any_role('Scheduler', 'DD Scheduler')
 async def set_notification_time(ctx, new_notification_hour):
     guild_id = ctx.message.guild.id
     response = dude8db.change_notification(guild_id, new_notification_hour)
@@ -51,6 +57,7 @@ async def set_notification_time(ctx, new_notification_hour):
 
 
 @dude8.command()
+@commands.has_any_role('Scheduler', 'DD Scheduler')
 async def set_channel(ctx, channel_name):
     channel = get(ctx.guild.channels, name=channel_name)
     if channel:
@@ -63,6 +70,7 @@ async def set_channel(ctx, channel_name):
 
 
 @dude8.command()
+@commands.has_any_role('Scheduler', 'DD Scheduler')
 async def set_weekly_notification(ctx, new_notification_day):
     guild_id = ctx.message.guild.id
     response = dude8db.change_weekly_notification(guild_id, new_notification_day)
