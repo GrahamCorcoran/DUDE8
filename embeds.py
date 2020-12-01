@@ -23,7 +23,7 @@ setup.add_field(name="Notification Channel",
 setup.add_field(name="Weekly Notification",
                 value="!dd set_weekly_notification <0-6> \n"
                       "ex: '!dd set_weekly_notification 0 \n"
-                      "Options are 0-6 Sunday-Saturday",
+                      "Options are 0-6 Monday-Sunday",
                 inline=False)
 
 

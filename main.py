@@ -64,7 +64,7 @@ async def set_channel(ctx, channel_name):
 
 @dude8.command()
 async def set_weekly_notification(ctx, new_notification_day):
-    guild_id=ctx.message.guild.id
+    guild_id = ctx.message.guild.id
     response = dude8db.change_weekly_notification(guild_id, new_notification_day)
     await ctx.send(response)
 
@@ -78,11 +78,20 @@ async def post_reminders():
 
         if notify:
             channel = dude8.get_channel(int(server['text_channel']))
-            weekly = int(now.isoweekday()) == server['weekly_notification']
+            weekly = int(now.weekday()) == int(server['weekly_notification'])
 
             if weekly:
-                # Post the weekly
-                pass
+                post = False
+                weekly_embed = embeds.upcoming.copy()
+                weekly_embed.title = "Upcoming Week at a Glance"
+                for delta in range(7):
+                    day = add_day_as_row(now, server, now.date() + timedelta(days=delta))
+                    if day:
+                        post = True
+                        weekly_embed.add_field(name=day[0], value=day[1], inline=False)
+                if post:
+                    await channel.send(embed=weekly_embed)
+
             daily = embeds.upcoming.copy()
             today = add_day_as_row(now, server, now.date())
             tomorrow = add_day_as_row(now, server, now.date() + timedelta(days=1))
@@ -110,7 +119,7 @@ def add_day_as_row(now, server, target_date):
         elif current_date + timedelta(days=1) == target_date:
             title = "Tomorrow"
         else:
-            title = target_date.strftime("%A")
+            title = target_date.strftime("%A %b %m")
         return_text = ""
         for due_date in day_return:
             return_text += due_date + "\n"
