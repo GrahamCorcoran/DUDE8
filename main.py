@@ -81,7 +81,7 @@ async def set_weekly_notification(ctx, new_notification_day):
     await ctx.message.delete()
 
 
-@tasks.loop(seconds=10)
+@tasks.loop(minutes=60)
 async def post_reminders():
     valid_servers = dude8db.valid_servers()
     for server in valid_servers:
