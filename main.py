@@ -1,10 +1,14 @@
 from datetime import datetime, timedelta
-import pytz
 from discord.ext import commands, tasks
 from discord.utils import get
+from dotenv import load_dotenv
+import pytz
 import embeds
 import dude8db
-import secrets
+import os
+
+load_dotenv()
+TOKEN = os.getenv("TOKEN")
 
 dude8 = commands.Bot(command_prefix="!dd ")
 
@@ -144,4 +148,4 @@ def add_day_as_row(now, server, target_date):
 async def on_guild_join(guild):
     dude8db.add_server(guild.id)
 
-dude8.run(secrets.token)
+dude8.run(TOKEN)
