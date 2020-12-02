@@ -1,7 +1,5 @@
 from datetime import datetime, timedelta
 import pytz
-import time
-
 from discord.ext import commands, tasks
 from discord.utils import get
 import embeds
@@ -23,6 +21,7 @@ async def add(ctx, course, description, date):
     guild_id = ctx.message.guild.id
     response = dude8db.add_duedate(guild_id, course, description, date)
     await ctx.send(response)
+    await ctx.message.delete()
 
 
 @dude8.command()
@@ -31,12 +30,14 @@ async def remove(ctx, course, description):
     guild_id = ctx.message.guild.id
     response = dude8db.remove_duedate(guild_id, course, description)
     await ctx.send(response)
+    await ctx.message.delete()
 
 
 @dude8.command()
 @commands.has_any_role('Scheduler', 'DD Scheduler')
 async def setup(ctx):
     await ctx.send(embed=embeds.setup)
+    await ctx.message.delete()
 
 
 @dude8.command()
@@ -54,6 +55,7 @@ async def set_notification_time(ctx, new_notification_hour):
     guild_id = ctx.message.guild.id
     response = dude8db.change_notification(guild_id, new_notification_hour)
     await ctx.send(response)
+    await ctx.message.delete()
 
 
 @dude8.command()
@@ -67,6 +69,7 @@ async def set_channel(ctx, channel_name):
         await ctx.send(f"Updated notification channel to {channel_name}.")
     else:
         await ctx.send(f"No channel found named {channel_name}.")
+    await ctx.message.delete()
 
 
 @dude8.command()
@@ -75,6 +78,7 @@ async def set_weekly_notification(ctx, new_notification_day):
     guild_id = ctx.message.guild.id
     response = dude8db.change_weekly_notification(guild_id, new_notification_day)
     await ctx.send(response)
+    await ctx.message.delete()
 
 
 @tasks.loop(seconds=10)
