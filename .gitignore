@@ -136,3 +136,9 @@ dmypy.json
 
 # Cython debug symbols
 cython_debug/
+
+# sqlite
+*.db
+
+# This is super temporary until I care to set up envars for this.
+secrets.py
