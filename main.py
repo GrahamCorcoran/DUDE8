@@ -6,9 +6,16 @@ import pytz
 import embeds
 import dude8db
 import os
+import logging
 
 load_dotenv()
 TOKEN = os.getenv("TOKEN")
+
+logger = logging.getLogger('discord')
+logger.setLevel(logging.INFO)
+handler = logging.FileHandler(filename='dude8.log', encoding='utf-8', mode='w')
+handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
+logger.addHandler(handler)
 
 dude8 = commands.Bot(command_prefix="!dd ")
 
