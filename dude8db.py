@@ -16,7 +16,7 @@ class Server(BaseModel):
     timezone = pw.TextField(null=True)
     weekly_notification = pw.IntegerField(null=True)
     notification_time = pw.IntegerField()
-    text_channel = pw.TextField(default="general")
+    text_channel = pw.TextField(null=True)
 
 
 class Course(BaseModel):
@@ -68,7 +68,8 @@ def valid_servers():
                    .join(DueDates)
                    .where(
         (Server.timezone.is_null(False)) &
-        (DueDates.due_date >= yesterday)
+        (DueDates.due_date >= yesterday) &
+        (Server.text_channel.is_null(False))
     ))
     dict_form = [model_to_dict(server, backrefs=True) for server in query]
 
