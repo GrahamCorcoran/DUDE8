@@ -24,7 +24,7 @@ async def on_ready():
 async def add(ctx, course, description, date):
     guild_id = ctx.message.guild.id
     response = dude8db.add_duedate(guild_id, course, description, date)
-    await ctx.send(response)
+    await ctx.send(response, delete_after=10)
     await ctx.message.delete()
 
 
@@ -49,7 +49,7 @@ async def setup(ctx):
 async def set_timezone(ctx, new_timezone):
     guild_id = ctx.message.guild.id
     response = dude8db.change_timezone(guild_id, new_timezone)
-    await ctx.send(response)
+    await ctx.send(response, delete_after=300)
     await ctx.message.delete()
 
 
@@ -58,7 +58,7 @@ async def set_timezone(ctx, new_timezone):
 async def set_notification_time(ctx, new_notification_hour):
     guild_id = ctx.message.guild.id
     response = dude8db.change_notification(guild_id, new_notification_hour)
-    await ctx.send(response)
+    await ctx.send(response, delete_after=300)
     await ctx.message.delete()
 
 
@@ -70,9 +70,9 @@ async def set_channel(ctx, channel_name):
         server = dude8db.Server
         (server.update({server.text_channel: channel.id})
                .where(server.serverID == ctx.guild.id)).execute()
-        await ctx.send(f"Updated notification channel to {channel_name}.")
+        await ctx.send(f"Updated notification channel to {channel_name}.", delete_after=300)
     else:
-        await ctx.send(f"No channel found named {channel_name}.")
+        await ctx.send(f"No channel found named {channel_name}.", delete_after=300)
     await ctx.message.delete()
 
 
@@ -81,7 +81,7 @@ async def set_channel(ctx, channel_name):
 async def set_weekly_notification(ctx, new_notification_day):
     guild_id = ctx.message.guild.id
     response = dude8db.change_weekly_notification(guild_id, new_notification_day)
-    await ctx.send(response)
+    await ctx.send(response, delete_after=300)
     await ctx.message.delete()
 
 
@@ -109,7 +109,7 @@ async def post_reminders():
                         post = True
                         weekly_embed.add_field(name=day[0], value=day[1], inline=False)
                 if post:
-                    await channel.send(embed=weekly_embed)
+                    await channel.send(embed=weekly_embed, delete_after=604800)
 
             daily = embeds.upcoming.copy()
             today = add_day_as_row(now, server, now.date())
@@ -121,7 +121,7 @@ async def post_reminders():
                 daily.add_field(name=tomorrow[0], value=tomorrow[1], inline=False)
 
             if today or tomorrow:
-                await channel.send(embed=daily)
+                await channel.send(embed=daily, delete_after=86400)
 
 
 def add_day_as_row(now, server, target_date):
