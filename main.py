@@ -94,7 +94,10 @@ async def post_reminders():
 
         if notify:
             channel = dude8.get_channel(int(server['text_channel']))
-            weekly = int(now.weekday()) == int(server['weekly_notification'])
+            try:
+                weekly = int(now.weekday()) == int(server['weekly_notification'])
+            except TypeError:
+                weekly = False
 
             if weekly:
                 post = False
