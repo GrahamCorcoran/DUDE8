@@ -24,7 +24,7 @@ async def on_ready():
 async def add(ctx, course, description, date):
     guild_id = ctx.message.guild.id
     response = dude8db.add_duedate(guild_id, course, description, date)
-    await ctx.send(response)
+    await ctx.send(response, delete_after=10)
     await ctx.message.delete()
 
 
