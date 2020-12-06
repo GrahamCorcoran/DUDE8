@@ -145,7 +145,7 @@ def add_day_as_row(now, server, target_date):
         elif current_date + timedelta(days=1) == target_date:
             title = "Tomorrow"
         else:
-            title = target_date.strftime("%A %b %m")
+            title = target_date.strftime("%A %b %d")
         return_text = ""
         for due_date in day_return:
             return_text += due_date + "\n"
